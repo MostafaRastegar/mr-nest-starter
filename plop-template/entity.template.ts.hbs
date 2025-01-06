@@ -1,0 +1,13 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class {{> entityCapitalized}} {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  {{#each fields}}
+  @Column()
+  {{#if type}}@Is{{type}}(){{/if}} // Add any validation decorators as necessary
+  {{name}}: {{type}};
+  {{/each}}
+}

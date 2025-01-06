@@ -1,0 +1,50 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Delete,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { {{> entityCapitalized}}Service } from './{{entity}}.service';
+import { {{> entityCapitalized}} } from './{{entity}}.entity';
+import { Create{{> entityCapitalized}}Dto } from './dto/create-{{entity}}.dto';
+import { Update{{> entityCapitalized}}Dto } from './dto/update-{{entity}}.dto';
+
+@Controller('{{entity}}')
+export class {{> entityCapitalized}}Controller {
+  constructor(private readonly {{entity}}Service: {{> entityCapitalized}}Service) {}
+
+  @Post()
+  @UsePipes(new ValidationPipe())
+  async create(@Body() create{{> entityCapitalized}}Dto: Create{{> entityCapitalized}}Dto): Promise<{{> entityCapitalized}}> {
+    return this.{{entity}}Service.create(create{{> entityCapitalized}}Dto);
+  }
+
+  @Get()
+  async findAll(): Promise<{{> entityCapitalized}}[]> {
+    return this.{{entity}}Service.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<{{> entityCapitalized}}> {
+    return this.{{entity}}Service.findOne(id);
+  }
+
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  async update(
+    @Param('id') id: string,
+    @Body() update{{> entityCapitalized}}Dto: Update{{> entityCapitalized}}Dto,
+  ): Promise<{{> entityCapitalized}}> {
+    return this.{{entity}}Service.update(id, update{{> entityCapitalized}}Dto);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.{{entity}}Service.remove(id);
+  }
+}

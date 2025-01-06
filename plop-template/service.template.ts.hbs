@@ -1,0 +1,52 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { {{> entityCapitalized}} } from './{{entity}}.entity';
+import { Create{{> entityCapitalized}}Dto } from './dto/create-{{entity}}.dto';
+import { Update{{> entityCapitalized}}Dto } from './dto/update-{{entity}}.dto';
+
+@Injectable()
+export class {{> entityCapitalized}}Service {
+  constructor(
+    @InjectRepository({{> entityCapitalized}})
+    private {{entity}}Repository: Repository<{{> entityCapitalized}}>,
+
+  ) {}
+
+  async create(create{{> entityCapitalized}}Dto: Create{{> entityCapitalized}}Dto): Promise<{{> entityCapitalized}}> {
+    const {{entity}} = this.{{entity}}Repository.create(create{{> entityCapitalized}}Dto);
+    return this.{{entity}}Repository.save({{entity}});
+  }
+
+  async findAll(): Promise<{{> entityCapitalized}}[]> {
+    return this.{{entity}}Repository.find();
+  }
+
+  async findOne(id: string): Promise<{{> entityCapitalized}}> {
+    const {{entity}} = await this.{{entity}}Repository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!{{entity}}) {
+      throw new NotFoundException(`{{> entityCapitalized}} with ID ${id} not found`);
+    }
+    return {{entity}};
+  }
+
+  async update(id: string, update{{> entityCapitalized}}Dto: Update{{> entityCapitalized}}Dto): Promise<{{> entityCapitalized}}> {
+    const {{entity}} = await this.findOne(id);
+    const {{entity}}Data = {
+      ...{{entity}},
+      ...update{{> entityCapitalized}}Dto,
+    };
+    return this.{{entity}}Repository.save({{entity}}Data);
+  }
+
+  async remove(id: string): Promise<void> {
+    const result = await this.{{entity}}Repository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`{{> entityCapitalized}} with ID ${id} not found`);
+    }
+  }
+}

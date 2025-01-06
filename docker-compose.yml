@@ -1,0 +1,24 @@
+# docker run --name postgres_db -e POSTGRES_PASSWORD=123456 -p 5432:5432 -d 810c36706d00
+# docker exec -it postgres_db psql -U postgres -c "CREATE DATABASE chat_app;"
+# docker exec -it postgres_db psql -U postgres -c "CREATE USER chat_user WITH ENCRYPTED PASSWORD 'chat_pass';"
+# docker exec -it postgres_db psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE chat_app TO chat_user;"
+# docker exec -it postgres_db psql -U postgres -c "GRANT ALL ON SCHEMA public TO chat_user;"
+
+version: '3.8'
+
+services:
+  db:
+    image: docker.cache.yaftar.ir/postgres:latest
+    restart: always
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: chat_app
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  db_data:
